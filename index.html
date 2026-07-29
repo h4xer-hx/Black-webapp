@@ -832,7 +832,7 @@ function render() {
   document.getElementById('userPoints').textContent = state.points;
 
   // Progress
-  const pct = Math.min((state.points / 5) * 100, 100);
+  const pct = Math.min((state.points / 6) * 100, 100);
   document.getElementById('progFill').style.width = pct + '%';
 
   // Dots
@@ -912,7 +912,7 @@ async function watchAd() {
     try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
 
     // Check if points reached 5 → auto credit
-    if (state.points >= 5) {
+    if (state.points >= 6) {
       state.points = 0;
       state.credits++;
       showToast('🎉 +1 Credit Earned!', 'success');
@@ -927,7 +927,7 @@ async function watchAd() {
         }));
       } catch(e) {}
     } else {
-      showToast('✅ +1 Point! (' + state.points + '/5)', 'success');
+      showToast('✅ +1 Point! (' + state.points + '/6)', 'success');
     }
 
     render();
