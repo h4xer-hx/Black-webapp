@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>BlackX Credits</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src='//libtl.com/sdk.js' data-zone='11439824' data-sdk='show_11439824'></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #080b14;
+  --bg2: #0d1220;
+  --bg3: #111827;
+  --card: #0f1629;
+  --border: #1e2d4a;
+  --accent: #3b82f6;
+  --accent2: #6366f1;
+  --gold: #f59e0b;
+  --green: #10b981;
+  --red: #ef4444;
+  --purple: #8b5cf6;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #475569;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Animated BG */
+.bg-glow {
+  position: fixed;
+  top: -20%;
+  left: -20%;
+  width: 60%;
+  height: 60%;
+  background: radial-gradient(circle, #3b82f608 0%, transparent 70%);
+  pointer-events: none;
+  animation: float 8s ease-in-out infinite;
+}
+.bg-glow2 {
+  position: fixed;
+  bottom: -10%;
+  right: -10%;
+  width: 50%;
+  height: 50%;
+  background: radial-gradient(circle, #8b5cf606 0%, transparent 70%);
+  pointer-events: none;
+  animation: float 10s ease-in-out infinite reverse;
+}
+@keyframes float {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(20px, 20px); }
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  padding: 0 16px 32px;
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+/* ── HEADER ── */
+.header {
+  text-align: center;
+  padding: 24px 0 8px;
+  position: relative;
+}
+
+.header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #3b82f615, #6366f115);
+  border: 1px solid #3b82f630;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #60a5fa;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.logo {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: #fff;
+}
+
+.logo .bx { color: #3b82f6; }
+.logo .x-letter {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.tagline {
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* ── USER CARD ── */
+.user-card {
+  background: linear-gradient(135deg, #0f1629, #131e35);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 16px;
+  margin: 16px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.user-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6);
+  background-size: 200%;
+  animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
+}
+
+.user-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+  box-shadow: 0 0 20px #3b82f630;
+}
+
+.user-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.user-id {
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 2px;
+  font-family: monospace;
+}
+
+.plan-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-top: 5px;
+}
+
+.plan-pill.free {
+  background: #1e2d4a;
+  color: #60a5fa;
+  border: 1px solid #3b82f630;
+}
+
+.plan-pill.premium {
+  background: linear-gradient(135deg, #f59e0b20, #f59e0b10);
+  color: #f59e0b;
+  border: 1px solid #f59e0b40;
+}
+
+/* ── CREDITS HERO ── */
+.credits-hero {
+  background: linear-gradient(135deg, #0f1629, #131e35);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 28px 20px;
+  text-align: center;
+  margin: 12px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.credits-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, #3b82f608 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.credits-label {
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.credits-number {
+  font-size: 72px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #60a5fa, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.credits-sub {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 6px;
+}
+
+/* Ad Progress */
+.progress-wrap {
+  margin-top: 16px;
+  background: #0a0f1e;
+  border-radius: 12px;
+  padding: 12px 14px;
+  text-align: left;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.progress-title {
+  font-size: 11px;
+  color: var(--text2);
+  font-weight: 600;
+}
+
+.progress-count {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.progress-bar {
+  height: 6px;
+  background: #1e2d4a;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #6366f1);
+  border-radius: 3px;
+  transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.progress-dots {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #1e2d4a;
+  border: 2px solid #2d3f5e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  color: #475569;
+  font-weight: 700;
+  transition: all 0.3s;
+}
+
+.dot.done {
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 0 8px #3b82f650;
+}
+
+/* ── STATS ── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.stat-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 8px;
+  text-align: center;
+}
+
+.stat-val {
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.stat-lbl {
+  font-size: 9px;
+  color: var(--text3);
+  margin-top: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+/* ── WATCH AD BTN ── */
+.ad-section { margin: 16px 0; }
+
+.section-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text3);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.watch-btn {
+  width: 100%;
+  padding: 18px;
+  background: linear-gradient(135deg, #1d3461, #1e3a5f);
+  border: 1px solid #3b82f640;
+  border-radius: 16px;
+  color: #60a5fa;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.watch-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, #3b82f610, transparent);
+  transition: left 0.6s;
+}
+
+.watch-btn:hover::before { left: 100%; }
+.watch-btn:active { transform: scale(0.97); }
+
+.watch-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.watch-btn .btn-icon { font-size: 20px; }
+
+.reward-note {
+  text-align: center;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text3);
+}
+
+.reward-note .hl { color: #60a5fa; font-weight: 700; }
+
+/* Cooldown */
+.cooldown-wrap {
+  margin-top: 10px;
+  display: none;
+  background: #0a0f1e;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.cooldown-bar {
+  height: 4px;
+  background: #1e2d4a;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.cooldown-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #6366f1);
+  border-radius: 2px;
+  transition: width 1s linear;
+}
+
+.cooldown-text {
+  font-size: 11px;
+  color: var(--text3);
+  text-align: center;
+  margin-top: 6px;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 18px 0;
+}
+
+/* ── WAYS TO EARN ── */
+.earn-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 16px;
+  margin: 12px 0;
+}
+
+.earn-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text3);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.earn-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #1a2540;
+}
+
+.earn-row:last-child { border-bottom: none; }
+
+.earn-icon-wrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.ic-blue { background: #1d3461; }
+.ic-gold { background: #2d1f0a; }
+.ic-purple { background: #1e1540; }
+
+.earn-info .title { font-size: 13px; font-weight: 600; color: var(--text); }
+.earn-info .sub { font-size: 11px; color: var(--text3); margin-top: 1px; }
+
+.earn-pill {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.pill-blue { background: #1d3461; color: #60a5fa; }
+.pill-gold { background: #2d1f0a; color: #f59e0b; }
+.pill-purple { background: #1e1540; color: #a78bfa; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: #0f1629;
+  border: 1px solid #3b82f650;
+  color: #60a5fa;
+  padding: 12px 22px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 999;
+  white-space: nowrap;
+  box-shadow: 0 8px 30px #00000060;
+}
+
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ── LOADING ── */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  gap: 16px;
+  color: var(--text3);
+  font-size: 13px;
+}
+
+.loader-ring {
+  width: 44px;
+  height: 44px;
+  border: 3px solid #1e2d4a;
+  border-top: 3px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.bottom-pad { height: 20px; }
+</style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+<div class="bg-glow2"></div>
+
+<div class="toast" id="toast"></div>
+
+<div class="container">
+
+  <!-- Loading -->
+  <div class="loading" id="loading">
+    <div class="loader-ring"></div>
+    Initializing BlackX...
+  </div>
+
+  <!-- Main Content -->
+  <div id="main-content" style="display:none">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="header-badge">🔥 OSINT Credits System</div>
+      <div class="logo">BLACK<span class="x-letter">X</span>OSINT</div>
+      <div class="tagline">Investigate • Discover • Protect</div>
+    </div>
+
+    <!-- User Card -->
+    <div class="user-card">
+      <div class="user-avatar">🕵️</div>
+      <div>
+        <div class="user-name" id="user-name">Loading...</div>
+        <div class="user-id" id="user-id">ID: ---</div>
+        <div class="plan-pill free" id="plan-pill">● FREE</div>
+      </div>
+    </div>
+
+    <!-- Credits Hero -->
+    <div class="credits-hero">
+      <div class="credits-label">AD CREDITS</div>
+      <div class="credits-number" id="credits-count">0</div>
+      <div class="credits-sub">1 credit = 1 OSINT search</div>
+
+      <!-- Ad Progress -->
+      <div class="progress-wrap">
+        <div class="progress-header">
+          <span class="progress-title">AD WATCH PROGRESS</span>
+          <span class="progress-count"><span id="ad-prog-num">0</span>/5 → +1 Credit</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+        </div>
+        <div class="progress-dots">
+          <div class="dot" id="dot-1">1</div>
+          <div class="dot" id="dot-2">2</div>
+          <div class="dot" id="dot-3">3</div>
+          <div class="dot" id="dot-4">4</div>
+          <div class="dot" id="dot-5">✓</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-val" id="stat-free">0</div>
+        <div class="stat-lbl">Free Left</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" id="stat-plan">0</div>
+        <div class="stat-lbl">Plan Left</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" id="stat-total">0</div>
+        <div class="stat-lbl">Total Done</div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Watch Ad -->
+    <div class="ad-section">
+      <div class="section-title">Earn Free Credits</div>
+      <button class="watch-btn" id="watch-btn" onclick="watchAd()">
+        <span class="btn-icon">▶</span>
+        WATCH AD & EARN CREDIT
+      </button>
+      <div class="reward-note">
+        Watch <span class="hl">5 ads</span> → get <span class="hl">+1 Credit</span> → use for OSINT
+      </div>
+
+      <div class="cooldown-wrap" id="cooldown-wrap">
+        <div class="cooldown-bar">
+          <div class="cooldown-fill" id="cooldown-fill" style="width:100%"></div>
+        </div>
+        <div class="cooldown-text" id="cooldown-text">Next ad in 30s</div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Ways to earn -->
+    <div class="earn-card">
+      <div class="earn-title">Ways to get searches</div>
+
+      <div class="earn-row">
+        <div class="earn-icon-wrap ic-blue">▶</div>
+        <div class="earn-info">
+          <div class="title">Watch Ads</div>
+          <div class="sub">Short video, full watch required</div>
+        </div>
+        <div class="earn-pill pill-blue">5 Ads = +1</div>
+      </div>
+
+      <div class="earn-row">
+        <div class="earn-icon-wrap ic-gold">🆓</div>
+        <div class="earn-info">
+          <div class="title">Free Searches</div>
+          <div class="sub">New user welcome bonus</div>
+        </div>
+        <div class="earn-pill pill-gold">3 Free</div>
+      </div>
+
+      <div class="earn-row">
+        <div class="earn-icon-wrap ic-purple">💎</div>
+        <div class="earn-info">
+          <div class="title">Premium Plan</div>
+          <div class="sub">Buy via /pay in bot</div>
+        </div>
+        <div class="earn-pill pill-purple">Up to ∞</div>
+      </div>
+    </div>
+
+    <div class="bottom-pad"></div>
+  </div>
+</div>
+
+<script>
+const tg = window.Telegram.WebApp;
+tg.expand();
+tg.ready();
+
+// State
+let userData = { id: 0, name: 'Agent', plan_name: 'FREE', credits: 0, free_left: 0, plan_left: 0, total_searches: 0 };
+let adProgress = 0;
+let cooldownTimer = null;
+const COOLDOWN = 30;
+
+// ── INIT ──
+async function init() {
+  const user = tg.initDataUnsafe?.user || {};
+  userData.id = user.id || 0;
+  userData.name = user.first_name || 'Agent';
+  userData.username = user.username || '';
+
+  // Load local progress
+  const saved = localStorage.getItem('bx_' + userData.id);
+  if (saved) {
+    try {
+      const p = JSON.parse(saved);
+      userData.credits = p.credits || 0;
+      adProgress = p.adProgress || 0;
+    } catch(e) {}
+  }
+
+  renderUI();
+
+  // Wait for Monetag SDK
+  await new Promise(r => setTimeout(r, 1500));
+
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('main-content').style.display = 'block';
+}
+
+// ── RENDER ──
+function renderUI() {
+  document.getElementById('user-name').textContent = userData.name;
+  document.getElementById('user-id').textContent = 'ID: ' + userData.id;
+  document.getElementById('credits-count').textContent = userData.credits;
+  document.getElementById('stat-free').textContent = userData.free_left;
+  document.getElementById('stat-plan').textContent = userData.plan_left >= 999999 ? '∞' : userData.plan_left;
+  document.getElementById('stat-total').textContent = userData.total_searches;
+
+  // Plan pill
+  const pill = document.getElementById('plan-pill');
+  if (userData.plan_name && userData.plan_name !== 'FREE') {
+    pill.className = 'plan-pill premium';
+    pill.textContent = '★ ' + userData.plan_name;
+  } else {
+    pill.className = 'plan-pill free';
+    pill.textContent = '● FREE';
+  }
+
+  // Progress
+  const pct = (adProgress / 5) * 100;
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('ad-prog-num').textContent = adProgress;
+
+  // Dots
+  for (let i = 1; i <= 5; i++) {
+    const dot = document.getElementById('dot-' + i);
+    if (i <= adProgress) {
+      dot.className = 'dot done';
+      dot.textContent = i < 5 ? '✓' : '★';
+    } else {
+      dot.className = 'dot';
+      dot.textContent = i;
+    }
+  }
+}
+
+// ── SAVE ──
+function save() {
+  localStorage.setItem('bx_' + userData.id, JSON.stringify({
+    credits: userData.credits,
+    adProgress: adProgress
+  }));
+}
+
+// ── WATCH AD ──
+async function watchAd() {
+  const btn = document.getElementById('watch-btn');
+  if (btn.disabled) return;
+
+  if (typeof show_11439824 !== 'function') {
+    showToast('⚠️ Ad loading... try again!');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="btn-icon">⏳</span> LOADING AD...';
+
+  try {
+    await show_11439824('pop');
+
+    // Ad watched!
+    adProgress++;
+    save();
+
+    try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
+
+    if (adProgress >= 5) {
+      // Credit earned!
+      adProgress = 0;
+      userData.credits++;
+      save();
+      renderUI();
+
+      showToast('🎉 +1 Credit Added!');
+
+      // Notify bot via sendData then close
+      setTimeout(() => {
+        try {
+          tg.sendData(JSON.stringify({
+            action: 'ad_credit',
+            user_id: userData.id,
+            credits: 1
+          }));
+        } catch(e) {}
+        setTimeout(() => tg.close(), 1200);
+      }, 800);
+
+    } else {
+      renderUI();
+      showToast('✅ ' + adProgress + '/5 — ' + (5 - adProgress) + ' more!');
+      startCooldown();
+    }
+
+  } catch(e) {
+    btn.disabled = false;
+    btn.innerHTML = '<span class="btn-icon">▶</span> WATCH AD & EARN CREDIT';
+    showToast('❌ Ad skipped — watch fully!');
+    try { tg.HapticFeedback.notificationOccurred('error'); } catch(e) {}
+  }
+}
+
+// ── COOLDOWN ──
+function startCooldown() {
+  const btn = document.getElementById('watch-btn');
+  const wrap = document.getElementById('cooldown-wrap');
+  const fill = document.getElementById('cooldown-fill');
+  const text = document.getElementById('cooldown-text');
+
+  wrap.style.display = 'block';
+  btn.innerHTML = '<span class="btn-icon">⏳</span> COOLDOWN...';
+  btn.disabled = true;
+
+  let rem = COOLDOWN;
+  cooldownTimer = setInterval(() => {
+    rem--;
+    fill.style.width = (rem / COOLDOWN * 100) + '%';
+    text.textContent = 'Next ad in ' + rem + 's';
+    if (rem <= 0) {
+      clearInterval(cooldownTimer);
+      wrap.style.display = 'none';
+      btn.disabled = false;
+      btn.innerHTML = '<span class="btn-icon">▶</span> WATCH AD & EARN CREDIT';
+    }
+  }, 1000);
+}
+
+// ── REDEEM CREDIT ──
+function redeemCredit() {
+  try {
+    tg.sendData(JSON.stringify({
+      action: "redeem_credit"
+    }));
+    showToast("🎁 Redeem request sent!");
+  } catch(e) {
+    showToast("❌ Unable to send request");
+  }
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+init();
+</script>
+</body>
+</html>
