@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>BlackX Points</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src='//libtl.com/sdk.js' data-zone='11439824' data-sdk='show_11439824'></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+:root {
+  --bg: #05070f;
+  --card: #0a0d1a;
+  --card2: #0d1120;
+  --border: #151c2e;
+  --border2: #1e2840;
+  --accent: #7c3aed;
+  --accent2: #6d28d9;
+  --gold: #f59e0b;
+  --gold2: #d97706;
+  --cyan: #06b6d4;
+  --green: #10b981;
+  --red: #ef4444;
+  --text: #f0f4ff;
+  --text2: #8892b0;
+  --text3: #3d4a66;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  user-select: none;
+}
+
+.stars {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  animation: twinkle var(--d, 3s) ease-in-out infinite;
+  opacity: 0;
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0; transform: scale(0.8); }
+  50% { opacity: var(--op, 0.6); transform: scale(1.2); }
+}
+
+.bg-blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 430px;
+  margin: 0 auto;
+  padding: 0 14px 40px;
+}
+
+.header {
+  padding: 22px 0 6px;
+  text-align: center;
+}
+
+.logo-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  box-shadow: 0 0 20px #7c3aed50;
+}
+
+.logo-text {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.5px;
+}
+.logo-text .x { color: var(--accent); }
+
+.logo-sub {
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.user-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 40px;
+  padding: 8px 14px 8px 8px;
+  margin: 16px 0 12px;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.user-av {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7c3aed, #06b6d4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.user-nm {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+
+.user-id-txt {
+  font-size: 10px;
+  color: var(--text3);
+  font-family: monospace;
+}
+
+.hero {
+  background: linear-gradient(135deg, #0d0a1f, #0a1020);
+  border: 1px solid #251945;
+  border-radius: 24px;
+  padding: 28px 20px 22px;
+  text-align: center;
+  margin: 12px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, #7c3aed20 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-label {
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.hero-points {
+  font-size: 80px;
+  font-weight: 800;
+  line-height: 1;
+  background: linear-gradient(135deg, #a78bfa, #7c3aed, #4f46e5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s;
+}
+
+.hero-points.pop {
+  animation: pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.hero-sub {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 6px;
+}
+
+.hero-goal {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #1a0f35;
+  border: 1px solid #3b1f70;
+  border-radius: 20px;
+  padding: 6px 14px;
+  margin-top: 14px;
+  font-size: 12px;
+  color: #a78bfa;
+  font-weight: 600;
+}
+
+.progress-section {
+  margin: 14px 0;
+}
+
+.prog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding: 0 2px;
+}
+
+.prog-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.prog-pct {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.prog-track {
+  height: 8px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.prog-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #7c3aed, #a78bfa);
+  border-radius: 4px;
+  transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+}
+
+.prog-bar::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 4px;
+  height: 100%;
+  background: #fff;
+  opacity: 0.4;
+  border-radius: 2px;
+}
+
+.circles {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding: 0 2px;
+}
+
+.circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--border2);
+  background: var(--card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text3);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+}
+
+.circle.filled {
+  border-color: #7c3aed;
+  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+  color: #fff;
+  box-shadow: 0 0 12px #7c3aed60;
+  transform: scale(1.05);
+}
+
+.circle.last {
+  border-color: var(--gold2);
+}
+
+.circle.last.filled {
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  border-color: var(--gold);
+  box-shadow: 0 0 16px #f59e0b80;
+}
+
+.div {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 18px 0;
+}
+
+.watch-btn {
+  width: 100%;
+  padding: 20px;
+  background: linear-gradient(135deg, #1a0f35, #150d2e);
+  border: 1px solid #3b1f70;
+  border-radius: 18px;
+  color: #a78bfa;
+  font-size: 16px;
+  font-weight: 800;
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.watch-btn .shine {
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #a78bfa15, transparent);
+  transition: left 0.8s;
+}
+.watch-btn:hover .shine { left: 150%; }
+.watch-btn:active { transform: scale(0.97); opacity: 0.9; }
+.watch-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.watch-btn .bicon { font-size: 20px; }
+
+.btn-note {
+  text-align: center;
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+.claim-btn {
+  width: 100%;
+  padding: 20px;
+  background: linear-gradient(135deg, #1f1500, #2a1a00);
+  border: 1px solid #6b4900;
+  border-radius: 18px;
+  color: var(--gold);
+  font-size: 16px;
+  font-weight: 800;
+  font-family: 'Space Grotesk', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.claim-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.claim-btn:active { transform: scale(0.97); }
+
+.claim-btn .shine {
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #f59e0b10, transparent);
+  transition: left 0.8s;
+}
+.claim-btn:hover .shine { left: 150%; }
+
+.cooldown-box {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-top: 10px;
+  display: none;
+}
+
+.cd-bar-track {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.cd-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #7c3aed, #a78bfa);
+  border-radius: 2px;
+  transition: width 1s linear;
+}
+
+.cd-text {
+  text-align: center;
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 6px;
+}
+
+.how-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 16px;
+  margin-top: 14px;
+}
+
+.how-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text3);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.how-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.how-row:last-child { border-bottom: none; }
+
+.how-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.how-body .t { font-size: 13px; font-weight: 600; color: var(--text); }
+.how-body .s { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+.toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--card);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  padding: 13px 24px;
+  border-radius: 40px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
+  box-shadow: 0 8px 40px #00000080;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 9999;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
+  gap: 14px;
+}
+
+.spin-ring {
+  width: 40px; height: 40px;
+  border: 3px solid var(--border2);
+  border-top: 3px solid var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.load-txt { font-size: 12px; color: var(--text3); letter-spacing: 1px; }
+
+.claimed-badge {
+  display: none;
+  background: linear-gradient(135deg, #052012, #071a0e);
+  border: 1px solid #15472a;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--green);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* 🔥 RESET BUTTON */
+.reset-btn {
+  background: none;
+  border: none;
+  color: var(--text3);
+  font-size: 11px;
+  padding: 8px;
+  margin-top: 10px;
+  cursor: pointer;
+  text-decoration: underline;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.reset-btn:hover { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+<div class="bg-blob" id="blob1" style="width:300px;height:300px;top:-100px;left:-80px;background:#7c3aed10;"></div>
+<div class="bg-blob" id="blob2" style="width:250px;height:250px;bottom:-80px;right:-60px;background:#06b6d410;"></div>
+
+<div class="toast" id="toast"></div>
+
+<div class="wrap">
+
+  <div class="loader" id="loader">
+    <div class="spin-ring"></div>
+    <div class="load-txt">LOADING BLACKX...</div>
+  </div>
+
+  <div id="main" style="display:none">
+
+    <div class="header">
+      <div class="logo-row">
+        <div class="logo-icon">🔍</div>
+        <div>
+          <div class="logo-text">BLACK<span class="x">X</span>OSINT</div>
+        </div>
+      </div>
+      <div class="logo-sub">Points & Rewards System</div>
+    </div>
+
+    <div class="user-pill">
+      <div class="user-av">🕵️</div>
+      <div>
+        <div class="user-nm" id="uname">Agent</div>
+        <div class="user-id-txt" id="uid">ID: ---</div>
+      </div>
+    </div>
+
+    <div class="hero">
+      <div class="hero-label">YOUR POINTS</div>
+      <div class="hero-points" id="pts">0</div>
+      <div class="hero-sub">Watch ads → earn points → claim free search</div>
+      <div class="hero-goal">🎯 Goal: 7 Points = +1 Free Search</div>
+    </div>
+
+    <div class="progress-section">
+      <div class="prog-header">
+        <span class="prog-title">Progress to Claim</span>
+        <span class="prog-pct" id="prog-pct">0/7</span>
+      </div>
+      <div class="prog-track">
+        <div class="prog-bar" id="prog-bar" style="width:0%"></div>
+      </div>
+      <div class="circles" id="circles">
+        <div class="circle" id="c1">1</div>
+        <div class="circle" id="c2">2</div>
+        <div class="circle" id="c3">3</div>
+        <div class="circle" id="c4">4</div>
+        <div class="circle" id="c5">5</div>
+        <div class="circle" id="c6">6</div>
+        <div class="circle last" id="c7">★</div>
+      </div>
+    </div>
+
+    <hr class="div">
+
+    <button class="watch-btn" id="watch-btn" onclick="watchAd()">
+      <div class="shine"></div>
+      <span class="bicon">▶</span>
+      WATCH AD → +1 POINT
+    </button>
+    <div class="btn-note">Watch a short ad — get 1 point instantly</div>
+
+    <div class="cooldown-box" id="cd-box">
+      <div class="cd-bar-track"><div class="cd-bar-fill" id="cd-fill" style="width:100%"></div></div>
+      <div class="cd-text" id="cd-txt">Next ad in 30s</div>
+    </div>
+
+    <button class="claim-btn" id="claim-btn" onclick="claimReward()" disabled>
+      <div class="shine"></div>
+      <span>🏆</span>
+      CLAIM +1 FREE SEARCH (7 pts)
+    </button>
+
+    <div class="claimed-badge" id="claimed-badge">
+      ✅ Claim request sent! Admin will add your free search shortly.
+    </div>
+
+    <!-- 🔥 RESET BUTTON - IF STUCK -->
+    <button class="reset-btn" onclick="resetState()">🔄 Reset (if stuck)</button>
+
+    <hr class="div">
+
+    <div class="how-card">
+      <div class="how-title">How It Works</div>
+      <div class="how-row">
+        <div class="how-num">1</div>
+        <div class="how-body">
+          <div class="t">Watch Ads</div>
+          <div class="s">Each ad gives you +1 point</div>
+        </div>
+      </div>
+      <div class="how-row">
+        <div class="how-num">2</div>
+        <div class="how-body">
+          <div class="t">Collect 7 Points</div>
+          <div class="s">Fill the progress bar to unlock claim</div>
+        </div>
+      </div>
+      <div class="how-row">
+        <div class="how-num">3</div>
+        <div class="how-body">
+          <div class="t">Claim Free Search</div>
+          <div class="s">Tap claim — sends message to admin</div>
+        </div>
+      </div>
+      <div class="how-row">
+        <div class="how-num">4</div>
+        <div class="how-body">
+          <div class="t">Admin Approves</div>
+          <div class="s">Admin uses /addfree in bot</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const tg = window.Telegram.WebApp;
+tg.expand();
+tg.ready();
+
+const POINTS_GOAL = 7;
+const COOLDOWN_SEC = 30;
+
+// 🔥 CONFIG - CHANGE THESE
+const BOT_TOKEN = "8974215751:AAEQZ5FOD8o7LqP0mKT6G93TWJuIAkfGq3s";
+const CHANNEL_ID = "-1003936028560";  // Your group/channel ID
+
+let user = { id: 0, name: 'Agent', username: '' };
+let points = 0;
+let claimed = false;
+let cdTimer = null;
+
+// Stars
+(function() {
+  const wrap = document.getElementById('stars');
+  for (let i = 0; i < 40; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2 + 1;
+    s.style.cssText = `
+      width:${size}px;height:${size}px;
+      top:${Math.random()*100}%;left:${Math.random()*100}%;
+      --d:${(Math.random()*4+2).toFixed(1)}s;
+      --op:${(Math.random()*0.5+0.2).toFixed(2)};
+      animation-delay:${(Math.random()*5).toFixed(1)}s;
+    `;
+    wrap.appendChild(s);
+  }
+})();
+
+function init() {
+  const u = tg.initDataUnsafe?.user || {};
+  user.id = u.id || 0;
+  user.name = u.first_name || 'Agent';
+  user.username = u.username || '';
+
+  document.getElementById('uname').textContent = user.name;
+  document.getElementById('uid').textContent = 'ID: ' + user.id;
+
+  const key = 'bx_pts_' + user.id;
+  try {
+    const s = JSON.parse(localStorage.getItem(key) || '{}');
+    points = s.points || 0;
+    claimed = s.claimed || false;
+  } catch(e) { points = 0; claimed = false; }
+
+  // 🔥 FIX: Agar claimed true hai but points 7 hai to claim ko false karo
+  // Iska matlab admin ne approve kiya hai ya user stuck hai
+  if (claimed && points >= POINTS_GOAL) {
+    // Allow user to claim again
+    claimed = false;
+    save();
+  }
+
+  setTimeout(() => {
+    document.getElementById('loader').style.display = 'none';
+    document.getElementById('main').style.display = 'block';
+    render();
+  }, 1000);
+}
+
+function save() {
+  localStorage.setItem('bx_pts_' + user.id, JSON.stringify({ points, claimed }));
+}
+
+function render() {
+  const p = Math.min(points, POINTS_GOAL);
+  document.getElementById('pts').textContent = points;
+  document.getElementById('prog-pct').textContent = p + '/' + POINTS_GOAL;
+  document.getElementById('prog-bar').style.width = (p / POINTS_GOAL * 100) + '%';
+
+  for (let i = 1; i <= POINTS_GOAL; i++) {
+    const el = document.getElementById('c' + i);
+    if (i <= p) {
+      el.classList.add('filled');
+      el.textContent = i < POINTS_GOAL ? '✓' : '★';
+    } else {
+      el.classList.remove('filled');
+      el.textContent = i < POINTS_GOAL ? i : '★';
+    }
+  }
+
+  const claimBtn = document.getElementById('claim-btn');
+  const badge = document.getElementById('claimed-badge');
+
+  // 🔥 FIX: Agar claimed true hai to badge dikhao, warna nahi
+  if (claimed) {
+    claimBtn.disabled = true;
+    claimBtn.innerHTML = '<span>✅</span> CLAIMED — Waiting for Admin';
+    badge.style.display = 'block';
+  } else if (points >= POINTS_GOAL) {
+    claimBtn.disabled = false;
+    claimBtn.style.opacity = '1';
+    badge.style.display = 'none';
+  } else {
+    claimBtn.disabled = true;
+    badge.style.display = 'none';
+  }
+}
+
+async function watchAd() {
+  const btn = document.getElementById('watch-btn');
+  if (btn.disabled) return;
+
+  if (typeof show_11439824 !== 'function') {
+    toast('⚠️ Ad loading... try again!');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<div class="shine"></div><span class="bicon">⏳</span> LOADING AD...';
+
+  try {
+    await show_11439824('pop');
+
+    points++;
+    save();
+
+    const el = document.getElementById('pts');
+    el.classList.remove('pop');
+    void el.offsetWidth;
+    el.classList.add('pop');
+
+    try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
+
+    render();
+    toast('🎉 +1 Point! Total: ' + points + '/' + POINTS_GOAL);
+
+    if (points >= POINTS_GOAL && !claimed) {
+      setTimeout(() => toast('🏆 7 Points! Tap CLAIM below!'), 1800);
+    }
+
+    startCooldown();
+
+  } catch(e) {
+    btn.disabled = false;
+    btn.innerHTML = '<div class="shine"></div><span class="bicon">▶</span> WATCH AD → +1 POINT';
+    toast('❌ Ad skipped — watch fully!');
+    try { tg.HapticFeedback.notificationOccurred('error'); } catch(e) {}
+  }
+}
+
+function startCooldown() {
+  const box = document.getElementById('cd-box');
+  const fill = document.getElementById('cd-fill');
+  const txt = document.getElementById('cd-txt');
+  const btn = document.getElementById('watch-btn');
+
+  box.style.display = 'block';
+  btn.innerHTML = '<div class="shine"></div><span class="bicon">⏳</span> COOLDOWN...';
+  btn.disabled = true;
+
+  let rem = COOLDOWN_SEC;
+  if (cdTimer) clearInterval(cdTimer);
+  cdTimer = setInterval(() => {
+    rem--;
+    fill.style.width = (rem / COOLDOWN_SEC * 100) + '%';
+    txt.textContent = 'Next ad in ' + rem + 's';
+    if (rem <= 0) {
+      clearInterval(cdTimer);
+      box.style.display = 'none';
+      btn.disabled = false;
+      btn.innerHTML = '<div class="shine"></div><span class="bicon">▶</span> WATCH AD → +1 POINT';
+    }
+  }, 1000);
+}
+
+// ========================================================
+// 🔥 CLAIM REWARD - Sends message directly to channel
+// ========================================================
+async function claimReward() {
+  if (points < POINTS_GOAL || claimed) return;
+
+  const btn = document.getElementById('claim-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span>⏳</span> SENDING REQUEST...';
+
+  try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
+
+  // Build message
+  const msg =
+    '🏆 **FREE SEARCH CLAIM REQUEST**\n\n' +
+    '👤 **Name:** ' + user.name + '\n' +
+    '🆔 **User ID:** `' + user.id + '`\n' +
+    (user.username ? '📎 **Username:** @' + user.username + '\n' : '') +
+    '⭐ **Points Earned:** ' + points + '\n' +
+    '🕐 **Time:** ' + new Date().toLocaleString() + '\n\n' +
+    '✅ **To Approve:**\n' +
+    '`/addfree ' + user.id + '`';
+
+  // 🔥 Send to channel using Bot API
+  let sent = false;
+  try {
+    const res = await fetch(
+      'https://api.telegram.org/bot' + BOT_TOKEN + '/sendMessage',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: CHANNEL_ID,
+          text: msg,
+          parse_mode: 'Markdown'
+        })
+      }
+    );
+    const data = await res.json();
+    sent = data.ok;
+    console.log('Send result:', data);
+  } catch(e) {
+    console.error('Send error:', e);
+    sent = false;
+  }
+
+  // 🔥 FIX: claimed = true, points reset to 0
+  claimed = true;
+  points = 0;
+  save();
+  render();
+
+  if (sent) {
+    toast('✅ Request sent to admin channel!');
+    document.getElementById('claimed-badge').textContent =
+      '✅ Claim request sent to admin channel! Admin will add your free search.';
+    document.getElementById('claimed-badge').style.display = 'block';
+  } else {
+    toast('⚠️ Could not send! Show this ID to admin: ' + user.id);
+    document.getElementById('claimed-badge').textContent =
+      '⚠️ Send manually to admin:\n' +
+      'User ID: ' + user.id + '\n' +
+      'Command: /addfree ' + user.id;
+    document.getElementById('claimed-badge').style.display = 'block';
+  }
+
+  btn.innerHTML = '<span>✅</span> CLAIMED — Waiting for Admin';
+
+  // Close after 4 seconds
+  setTimeout(() => {
+    try { tg.close(); } catch(e) {}
+  }, 4000);
+}
+
+// ========================================================
+// 🔥 RESET FUNCTION - If user is stuck
+// ========================================================
+function resetState() {
+  if (confirm('Reset your points? (Only if stuck)')) {
+    points = 0;
+    claimed = false;
+    save();
+    render();
+    toast('🔄 Reset successfully! Start watching ads again.');
+  }
+}
+
+function toast(msg, dur = 3000) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._timer);
+  el._timer = setTimeout(() => el.classList.remove('show'), dur);
+}
+
+init();
+</script>
+</body>
+</html>
